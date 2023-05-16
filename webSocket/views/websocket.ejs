@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+      /* CSS for fade-in animation */
+      .fade-in {
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+      }
+
+      .fade-in.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Temperature: <span id="temperature" ></span></p>
+<p>Humidity: <span id="humidity"></span></p>
+    <canvas id="myChart"></canvas>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+      const ws = new WebSocket("ws://192.168.0.13:3000/websocket");
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart( ctx, {
+        type: 'bar',
+        data: {
+          labels: [ 'Temperature', 'Humidity'],
+          datasets: [{
+            label: 'Atmospher managment',
+            data: [0,0]//temperature, humidity]
+            ,
+            backgroundColor: ['red', 'rgb(0,51,102)'] 
+          }]
+        }
+      })
+
+
+ws.addEventListener("open", () => {
+  console.log("WebSocket connection established");
+
+  /*ws.send(JSON.stringify({
+    temperature: 100,
+    humidity:200
+  }));*/
+});
+
+ws.addEventListener("message", ({ data }) => {
+  console.log(`Received message: ${data}`);
+  console.log('yes Message get into the eventlistener')
+  try{
+    
+        // update data
+        const { temperature, humidity } = JSON.parse(data);
+
+        //document.getElementById("temperature").innerText = temperature;
+        //document.getElementById("humidity").innerText = humidity;
+
+        // Smoothly update the values over time with fade-in effect
+        const temperatureElement = document.getElementById("temperature");
+        temperatureElement.innerText = temperature;
+          const humidityElement = document.getElementById("humidity");
+          humidityElement.innerText = humidity;
+        /*var ctx = document.getElementById("myChart").getContext("2d");
+        var myChart = new Chart( ctx, { 
+        type: 'bar',
+        data: {
+          labels: [ 'Temperature', 'Humidity'],
+          datasets: [{
+            label: 'Atmospher Managment',
+            data: [temperature, humidity]
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      })*/
+      const startTemperature = parseFloat(temperatureElement.innerText);
+          const startHumidity = parseFloat(humidityElement.innerText);
+          const endTemperature = parseFloat(temperature);
+          const endHumidity = parseFloat(humidity);
+          const duration = 1000; // Animation duration in milliseconds
+          const startTime = performance.now();
+
+          function animateValues(timestamp) {
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            const currentTemperature = startTemperature + (endTemperature - startTemperature) * progress;
+            const currentHumidity = startHumidity + (endHumidity - startHumidity) * progress;
+
+            temperatureElement.innerText = currentTemperature.toFixed(2);
+            humidityElement.innerText = currentHumidity.toFixed(2);
+
+            if (progress < 1) {
+              requestAnimationFrame(animateValues);
+            } else {
+              temperatureElement.classList.add("show");
+              humidityElement.classList.add("show");
+            }
+          }
+
+          requestAnimationFrame(animateValues);
+
+          // Update the chart data
+          myChart.data.datasets[0].data = [endTemperature, endHumidity];
+          myChart.update();
+    } catch(error) {
+      console.error("error parsing JSON:", error)
+    }
+      });
+    </script>
+  </body>
+</html>
