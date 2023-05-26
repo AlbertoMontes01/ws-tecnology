@@ -35,13 +35,15 @@ wss.on('connection', (ws,req) => {
   
   ws.on('message', (message) => {
     try{
-      var xd = JSON.parse(message)
-      temperature = xd.Temperature;
-      humidity = xd.Humidity;
-      console.log(`${temperature}, ${humidity}`)
+      var recivedMessage = JSON.parse(message)
+      temperature = recivedMessage.Temperature;
+      humidity = recivedMessage.Humidity;
+      airquality = recivedMessage.Airquality;
+      //distance = xd.Distance;
+      console.log(`${temperature}, ${humidity}, ${airquality}`)
 
       const dataToSend = JSON.stringify({
-        temperature, humidity
+        temperature, humidity, airquality
       });
       wss.clients.forEach(function(client) {
         if(client.readyState === WebSocket.OPEN) {
@@ -54,7 +56,7 @@ wss.on('connection', (ws,req) => {
     console.log(`Received message: ${message}`);
 
     // Respond to the message
-    ws.send(`Echo: ${message}`);
+    //ws.send(`Echo: ${message}`);
   });
   ws.on("close", () => {
     console.log('Client has disconnected!');

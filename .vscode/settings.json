@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/40936b40-5e7c-49ae-b9ac-c05a1780f578/resourceGroups/Betoapp_group/providers/Microsoft.Web/sites/VitalAirSense",
+    "appService.deploySubpath": "."
+}

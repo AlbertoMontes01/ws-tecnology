@@ -19,20 +19,22 @@
     <h1><%= title %></h1>
     <p>Temperature: <span id="temperature" ></span></p>
 <p>Humidity: <span id="humidity"></span></p>
+<p>AirQuality: <span id="airquality"></span></p>
+
     <canvas id="myChart"></canvas>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-      const ws = new WebSocket("ws://192.168.0.13:3000/websocket");
+      const ws = new WebSocket("ws://192.168.4.3:3000/websocket");
 
       var ctx = document.getElementById("myChart").getContext("2d");
       var myChart = new Chart( ctx, {
         type: 'bar',
         data: {
-          labels: [ 'Temperature', 'Humidity'],
+          labels: [ 'Temperature', 'Humidity', 'airquality'],
           datasets: [{
             label: 'Atmospher managment',
-            data: [0,0]//temperature, humidity]
+            data: [0,0,0]//temperature, humidity]
             ,
             backgroundColor: ['red', 'rgb(0,51,102)'] 
           }]
@@ -44,8 +46,8 @@ ws.addEventListener("open", () => {
   console.log("WebSocket connection established");
 
   /*ws.send(JSON.stringify({
-    temperature: 100,
-    humidity:200
+    Temperature: 100,
+    Humidity:200
   }));*/
 });
 
@@ -55,16 +57,18 @@ ws.addEventListener("message", ({ data }) => {
   try{
     
         // update data
-        const { temperature, humidity } = JSON.parse(data);
+        const { temperature, humidity, airquality } = JSON.parse(data);
 
         //document.getElementById("temperature").innerText = temperature;
         //document.getElementById("humidity").innerText = humidity;
-
+        var lol = document.getElementById("xdd");
         // Smoothly update the values over time with fade-in effect
         const temperatureElement = document.getElementById("temperature");
         temperatureElement.innerText = temperature;
           const humidityElement = document.getElementById("humidity");
           humidityElement.innerText = humidity;
+          const airqualityElement = document.getElementById("airquality");
+          airqualityElement.innerText = airquality;
         /*var ctx = document.getElementById("myChart").getContext("2d");
         var myChart = new Chart( ctx, { 
         type: 'bar',
@@ -87,8 +91,10 @@ ws.addEventListener("message", ({ data }) => {
       })*/
       const startTemperature = parseFloat(temperatureElement.innerText);
           const startHumidity = parseFloat(humidityElement.innerText);
+          const startAirquality = parseFloat(airqualityElement.innerText);
           const endTemperature = parseFloat(temperature);
           const endHumidity = parseFloat(humidity);
+          const endAirquality = parseFloat(airquality);
           const duration = 1000; // Animation duration in milliseconds
           const startTime = performance.now();
 
@@ -98,22 +104,25 @@ ws.addEventListener("message", ({ data }) => {
 
             const currentTemperature = startTemperature + (endTemperature - startTemperature) * progress;
             const currentHumidity = startHumidity + (endHumidity - startHumidity) * progress;
+            const currentQuality = startAirquality + (endAirquality - startAirquality) * progress;
 
             temperatureElement.innerText = currentTemperature.toFixed(2);
             humidityElement.innerText = currentHumidity.toFixed(2);
+            airqualityElement.innerText = currentQuality.toFixed(2);
 
             if (progress < 1) {
               requestAnimationFrame(animateValues);
             } else {
               temperatureElement.classList.add("show");
               humidityElement.classList.add("show");
+              airqualityElement.classList.add("show");
             }
           }
 
           requestAnimationFrame(animateValues);
 
           // Update the chart data
-          myChart.data.datasets[0].data = [endTemperature, endHumidity];
+          myChart.data.datasets[0].data = [endTemperature, endHumidity, endAirquality];
           myChart.update();
     } catch(error) {
       console.error("error parsing JSON:", error)
