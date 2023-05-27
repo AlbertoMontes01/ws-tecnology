@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  const flag = true;
+  res.render('index', { title: 'VitalAirSense', flag });
 });
 
 module.exports = router;

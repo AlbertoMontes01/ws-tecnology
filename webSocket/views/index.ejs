@@ -3,54 +3,196 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+    <style>
+      /* CSS for fade-in animation */
+      
+    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
+
   </head>
   <body>
-      <canvas id="myChart" width="400" height="400"></canvas>
-  </body>
-  <script>
-      var ctx= document.getElementById("myChart").getContext("2d");
-      var myChart= new Chart(ctx,{
-          type:"pie",
-          data:{
-              labels:['col1','col2','col3'],
-              datasets:[{
-                      label:'Num datos',
-                      data:[10,9,15],
-                      backgroundColor:[
-                          'rgb(66, 134, 244,0.5)',
-                          'rgb(74, 135, 72,0.5)',
-                          'rgb(229, 89, 50,0.5)'
-                      ]
-              }]
-          },
-          options:{
-              scales:{
-                  yAxes:[{
-                          ticks:{
-                              beginAtZero:true
-                          }
-                  }]
-              }
-          }
-      });</script>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navBar container-fluid">
+      <h1 class="textXd navTitle"><%= title %></h1>
+    </nav>
+    <!--<h1><%= title %></h1>
+    <p class="textXd">Temperature: <span id="temperature" ></span></p>-->
+<p class="textXd">Humidity: <span id="humidity"></span></p>
+<p class="textXd">AirQuality: <span id="airquality"></span></p>
+<br>
+<div class="card mb-3 CustomePadding" style="max-width: 300px;">
+  <div class="row g-0 align-items-center">
+    <div class="col-md-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-thermometer-half" viewBox="0 0 16 16">
+        <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415z" fill="red" stroke="red"/>
+        <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
+      </svg>
+    </div>
+    <div class="col-md-8 row g-0 align-items-center">
+      <div class="card-body">
+        <h5 class="card-title bold" style="margin-bottom: 0;">Temperature</h5>
+        <p class="card-text boldResult"><span id="temperature" ></span><span id="temperatureSign">ºC</span></p>
+        </div>
+    </div>
+  </div>
+</div>
+<div id="test">
+</div>
+    <canvas id="myChart"></canvas>
+    
+    
+   
+    <!--JS------------------------------------------------------------------->  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-      const ws = new WebSocket("ws://148.213.190.31:3000");
+      var temperatureSymbol = "°C";
+      const ws = new WebSocket("ws://192.168.0.12:3000/index");
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart( ctx, {
+        type: 'bar',
+        data: {
+          labels: [ 'Temperature'],
+          datasets: [{
+            label: 'Atmospher managment',
+            data: [0]//temperature, humidity]
+            ,
+            backgroundColor: ['red', 'rgb(0,51,102)'] 
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      })
+      /*
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart( ctx, {
+        type: 'bar',
+        data: {
+          labels: [ 'Temperature', 'Humidity', 'airquality'],
+          datasets: [{
+            label: 'Atmospher managment',
+            data: [0,0,0]//temperature, humidity]
+            ,
+            backgroundColor: ['red', 'rgb(0,51,102)'] 
+          }]
+        }
+      })*/
+
 
 ws.addEventListener("open", () => {
   console.log("WebSocket connection established");
 
-  //ws.send("Hello, server!");
-  ws.send(JSON.stringify({
-    Temperature: 1000,
-    Humidity:2100
-  }));
+  /*ws.send(JSON.stringify({
+    Temperature: 100,
+    Humidity:200
+  }));*/
 });
 
 ws.addEventListener("message", ({ data }) => {
   console.log(`Received message: ${data}`);
-});
+  console.log('yes Message get into the eventlistener')
+  try{
+    
+        // update data
+        const { temperature, humidity, airquality } = JSON.parse(data);
 
+        //document.getElementById("temperature").innerText = temperature;
+        //document.getElementById("humidity").innerText = humidity;
+        const temperatureSign = document.getElementById("temperatureSign");
+    temperatureSign.innerText = temperatureSymbol;
+        // Smoothly update the values over time with fade-in effect
+        const temperatureElement = document.getElementById("temperature");
+        temperatureElement.innerText = temperature;
+          const humidityElement = document.getElementById("humidity");
+          humidityElement.innerText = humidity;
+          const airqualityElement = document.getElementById("airquality");
+          airqualityElement.innerText = airquality;
+        /*var ctx = document.getElementById("myChart").getContext("2d");
+        var myChart = new Chart( ctx, { 
+        type: 'bar',
+        data: {
+          labels: [ 'Temperature', 'Humidity'],
+          datasets: [{
+            label: 'Atmospher Managment',
+            data: [temperature, humidity]
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      })*/
+      const startTemperature = parseFloat(temperatureElement.innerText);
+          const startHumidity = parseFloat(humidityElement.innerText);
+          const startAirquality = parseFloat(airqualityElement.innerText);
+          const endTemperature = parseFloat(temperature);
+          const endHumidity = parseFloat(humidity);
+          const endAirquality = parseFloat(airquality);
+          const duration = 1000; // Animation duration in milliseconds
+          const startTime = performance.now();
+
+          function animateValues(timestamp) {
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            const currentTemperature = startTemperature + (endTemperature - startTemperature) * progress;
+            const currentHumidity = startHumidity + (endHumidity - startHumidity) * progress;
+            const currentQuality = startAirquality + (endAirquality - startAirquality) * progress;
+
+            temperatureElement.innerText = currentTemperature.toFixed(2);
+            humidityElement.innerText = currentHumidity.toFixed(2);
+            airqualityElement.innerText = currentQuality.toFixed(2);
+
+            if (progress < 1) {
+              requestAnimationFrame(animateValues);
+            } else {
+              temperatureElement.classList.add("show");
+              humidityElement.classList.add("show");
+              airqualityElement.classList.add("show");
+            }
+          }
+
+          requestAnimationFrame(animateValues);
+
+          // Update the chart data
+          myChart.data.datasets[0].data = [endTemperature, endHumidity, endAirquality];
+          myChart.update();
+          
+            if (endTemperature > 26) {
+              let testt = document.getElementById("test")
+              testt.innerHTML = `<div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+</svg>
+  <div style="margin-left: 10px; align-items-center">
+     <span class="textXd" >Be careful, the atmosphere is hot</span>
+  </div>
+</div>`
+} else {
+  let testt = document.getElementById("test")
+  testt.innerText =""
+}
+
+    } catch(error) {
+      console.error("error parsing JSON:", error)
+    }
+      });
     </script>
   </body>
 </html>

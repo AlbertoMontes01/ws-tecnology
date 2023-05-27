@@ -1,8 +1,40 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
 }
 
-a {
-  color: #00B7FF;
+.fade-in.show {
+  opacity: 1;
+}
+
+.textXd {
+  font-family: 'Roboto', sans-serif;
+}
+.navBar{
+  width: 100%;
+  height: 75px;
+  line-height:  75px;
+  padding:  0px 100px;
+  background-image: linear-gradient(#033747, #012733);
+}
+
+.navTitle {
+  color: white;
+}
+
+.CustomePadding{
+  margin: 15px;
+  margin-right: 25px;
+}
+
+.bold{
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+.boldResult {
+  
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
 }

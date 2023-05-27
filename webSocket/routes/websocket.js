@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.get('/', function(req,res,next ){
   
-  res.render('websocket', {title: 'websocket'})
+  res.render('websocket', {title: 'VitalAirSense'})
 })
 
 module.exports = router;
