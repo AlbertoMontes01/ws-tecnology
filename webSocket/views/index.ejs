@@ -13,20 +13,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
-
+<script src="https://kit.fontawesome.com/a9545be87e.js" crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body style="background-color: #f2f2f2;">
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navBar container-fluid">
       <h1 class="textXd navTitle"><%= title %></h1>
     </nav>
-    <!--<h1><%= title %></h1>
-    <p class="textXd">Temperature: <span id="temperature" ></span></p>-->
-<p class="textXd">Humidity: <span id="humidity"></span></p>
-<p class="textXd">AirQuality: <span id="airquality"></span></p>
 <br>
+<!--Temperature Card-->
 <div class="card mb-3 CustomePadding" style="max-width: 300px;">
   <div class="row g-0 align-items-center">
-    <div class="col-md-4">
+    <div class="col-md-4" >
       <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-thermometer-half" viewBox="0 0 16 16">
         <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415z" fill="red" stroke="red"/>
         <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
@@ -40,11 +38,67 @@
     </div>
   </div>
 </div>
-<div id="test">
+<!--Temperature alert-->
+<div id="temperatureAlert">
 </div>
-    <canvas id="myChart"></canvas>
-    
-    
+
+<!-- Canvas conteiner Temperature-->
+<div class="card mb-3 CustomePadding" style="max-width: 1200px;">
+  <canvas id="temperatureChart"></canvas>
+</div>    
+
+<!--Humidity Card-->
+<div class="card mb-3 CustomePadding" style="max-width: 300px;">
+  <div class="row g-0 align-items-center">
+    <div class="col-md-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-thermometer-half" viewBox="0 0 16 16">
+        <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415z" fill="blue" stroke="blue"/>
+        <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
+      </svg>
+    </div>
+    <div class="col-md-8 row g-0 align-items-center">
+      <div class="card-body">
+        <h5 class="card-title bold" style="margin-bottom: 0;">Humidity</h5>
+        <p class="card-text boldResult"><span id="humidity"></span><span id="temperatureSign">ºC</span></p>
+        </div>
+    </div>
+  </div>
+</div>
+<!--Humidity alert-->
+<div id="humidityAlert">
+</div>
+
+<!-- Canvas conteiner Humidity-->
+<div class="card mb-3 CustomePadding" style="max-width: 1200px;">
+  <canvas id="humidityChart"></canvas>
+</div>    
+
+<!--Quality Card-->
+<div class="card mb-3 CustomePadding" style="max-width: 300px;">
+  <div class="row g-0 align-items-center">
+    <div class="col-md-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-clipboard2-pulse" viewBox="0 0 16 16">
+        <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5h3Z"/>
+        <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-12Z"/>
+        <path d="M9.979 5.356a.5.5 0 0 0-.968.04L7.92 10.49l-.94-3.135a.5.5 0 0 0-.926-.08L4.69 10H4.5a.5.5 0 0 0 0 1H5a.5.5 0 0 0 .447-.276l.936-1.873 1.138 3.793a.5.5 0 0 0 .968-.04L9.58 7.51l.94 3.135A.5.5 0 0 0 11 11h.5a.5.5 0 0 0 0-1h-.128L9.979 5.356Z"/>
+      </svg>
+    </div>
+    <div class="col-md-8 row g-0 align-items-center">
+      <div class="card-body">
+        <h5 class="card-title bold" style="margin-bottom: 0;">Air Quality</h5>
+        <p class="card-text boldResult"><span id="airquality"></span><span id="temperatureSign">ºC</span></p>
+        </div>
+    </div>
+  </div>
+</div>
+<!--Quality alert-->
+<div id="qualityAlert">
+</div>
+
+<!-- Canvas conteiner Quality-->
+<div class="card mb-3 CustomePadding" style="max-width: 1200px;">
+  <canvas id="qualityChart"></canvas>
+</div>    
    
     <!--JS------------------------------------------------------------------->  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -52,42 +106,74 @@
       var temperatureSymbol = "°C";
       const ws = new WebSocket("ws://192.168.0.12:3000/index");
 
-      var ctx = document.getElementById("myChart").getContext("2d");
-      var myChart = new Chart( ctx, {
-        type: 'bar',
-        data: {
-          labels: [ 'Temperature'],
-          datasets: [{
-            label: 'Atmospher managment',
-            data: [0]//temperature, humidity]
-            ,
-            backgroundColor: ['red', 'rgb(0,51,102)'] 
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
+var ctx = document.getElementById("temperatureChart").getContext("2d");
+var myTemperatureChart = new Chart( ctx, {
+  type: 'bar',
+  data: {
+    labels: [ 'Temperature'],
+    datasets: [{
+      label: 'Temperature Managment',
+      data: [0]//temperature, humidity]
+      ,
+      backgroundColor: ['red'] 
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
         }
-      })
-      /*
-      var ctx = document.getElementById("myChart").getContext("2d");
-      var myChart = new Chart( ctx, {
-        type: 'bar',
-        data: {
-          labels: [ 'Temperature', 'Humidity', 'airquality'],
-          datasets: [{
-            label: 'Atmospher managment',
-            data: [0,0,0]//temperature, humidity]
-            ,
-            backgroundColor: ['red', 'rgb(0,51,102)'] 
-          }]
+      }]
+    }
+  }
+})
+
+var ctxx = document.getElementById("humidityChart").getContext("2d");
+var myHumidityChart = new Chart( ctxx, {
+  type: 'bar',
+  data: {
+    labels: [ 'Humidity'],
+    datasets: [{
+      label: 'Humidity Managment',
+      data: [0]//temperature, humidity]
+      ,
+      backgroundColor: ['#0833a2'] 
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
         }
-      })*/
+      }]
+    }
+  }
+})
+
+var ctxxx = document.getElementById("qualityChart").getContext("2d");
+var myAirQualityChart = new Chart( ctxxx, {
+  type: 'bar',
+  data: {
+    labels: [ 'Air Quality'],
+    datasets: [{
+      label: 'Air Quality Managment',
+      data: [0]//temperature, humidity]
+      ,
+      backgroundColor: ['#808080'] 
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
+})
 
 
 ws.addEventListener("open", () => {
@@ -118,26 +204,6 @@ ws.addEventListener("message", ({ data }) => {
           humidityElement.innerText = humidity;
           const airqualityElement = document.getElementById("airquality");
           airqualityElement.innerText = airquality;
-        /*var ctx = document.getElementById("myChart").getContext("2d");
-        var myChart = new Chart( ctx, { 
-        type: 'bar',
-        data: {
-          labels: [ 'Temperature', 'Humidity'],
-          datasets: [{
-            label: 'Atmospher Managment',
-            data: [temperature, humidity]
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        }
-      })*/
       const startTemperature = parseFloat(temperatureElement.innerText);
           const startHumidity = parseFloat(humidityElement.innerText);
           const startAirquality = parseFloat(airqualityElement.innerText);
@@ -171,11 +237,15 @@ ws.addEventListener("message", ({ data }) => {
           requestAnimationFrame(animateValues);
 
           // Update the chart data
-          myChart.data.datasets[0].data = [endTemperature, endHumidity, endAirquality];
-          myChart.update();
+          myTemperatureChart.data.datasets[0].data = [endTemperature];
+          myTemperatureChart.update();
+          myHumidityChart.data.datasets[0].data = [endHumidity];
+          myHumidityChart.update();
+          myAirQualityChart.data.datasets[0].data = [endAirquality];
+          myAirQualityChart.update();
           
-            if (endTemperature > 26) {
-              let testt = document.getElementById("test")
+          if (endTemperature > 26) {
+              let testt = document.getElementById("temperatureAlert")
               testt.innerHTML = `<div class="alert alert-danger d-flex align-items-center" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
   <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -184,8 +254,40 @@ ws.addEventListener("message", ({ data }) => {
      <span class="textXd" >Be careful, the atmosphere is hot</span>
   </div>
 </div>`
-} else {
-  let testt = document.getElementById("test")
+
+} 
+else {
+  let testt = document.getElementById("temperatureAlert")
+  testt.innerText =""
+}
+            if (endHumidity > 35) {
+              let testt = document.getElementById("humidityAlert")
+              testt.innerHTML = `<div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+</svg>
+  <div style="margin-left: 10px; align-items-center">
+     <span class="textXd" >Be careful, the atmosphere is hot</span>
+  </div>
+</div>`
+} 
+else {
+  let testt = document.getElementById("humidityAlert")
+  testt.innerText =""
+}
+            if (endAirquality > 200) {
+              let testt = document.getElementById("qualityAlert")
+              testt.innerHTML = `<div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+</svg>
+  <div style="margin-left: 10px; align-items-center">
+     <span class="textXd" >Be careful, the atmosphere is hot</span>
+  </div>
+</div>`
+} 
+else {
+  let testt = document.getElementById("qualityAlert")
   testt.innerText =""
 }
 
